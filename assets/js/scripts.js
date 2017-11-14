@@ -28,7 +28,7 @@ jQuery(document).ready(function() {
     */
     $('#btn_start').on('click', function() {
 
-        $('#btn_start').css('display','None')
+        $('#btn_start').css('display','None');
         $('.registration-form fieldset:first-child').fadeIn('slow');
         start_camera();
 
@@ -43,24 +43,30 @@ jQuery(document).ready(function() {
     // next step
     $('.registration-form .btn-next').on('click', function() {
     	var parent_fieldset = $(this).parents('fieldset');
-    	var next_step = true;
-    	
-    	parent_fieldset.find('input[type="text"], input[type="password"], textarea').each(function() {
-    		if( $(this).val() == "" ) {
-    			$(this).addClass('input-error');
-    			next_step = false;
-    		}
-    		else {
-    			$(this).removeClass('input-error');
-    		}
-    	});
-    	
-    	if( next_step ) {
-    		parent_fieldset.fadeOut(400, function() {
-	    		$(this).next().fadeIn();
-	    	});
-    	}
-    	
+
+        var button_id = $(this).attr("id");
+
+        if(button_id == "finish_survey"){
+            parent_fieldset.fadeOut(400, function() {
+                $(this).next().fadeIn();
+            });
+
+            $('#btn_start').css('display','');
+        }
+        else{
+            var selected_option = parent_fieldset.find("input[type='radio']:checked").val();
+
+            if(selected_option){
+                parent_fieldset.find('.q_error').text("");
+                parent_fieldset.fadeOut(400, function() {
+                    $(this).next().fadeIn();
+                });
+            }
+            else{
+                parent_fieldset.find('.q_error').text("No option selected !");
+            }
+        }
+
     });
     
     // previous step
@@ -97,8 +103,6 @@ jQuery(document).ready(function() {
             $('fieldset[style*="display: block"]').fadeOut(400, function() {
                 $('.registration-form fieldset:nth-child(2)').fadeIn('slow');
                 $("#youtube_video")[0].src += "?autoplay=1";
-                //ev.preventDefault();
-
             });
 
         });

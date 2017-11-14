@@ -92,6 +92,15 @@ jQuery(document).ready(function() {
         scanner.addListener('scan', function (content) {
             console.log(content);
             var parsed_content = parse_qr_code(content);
+            //login(parsed_content);
+
+            $('fieldset[style*="display: block"]').fadeOut(400, function() {
+                $('.registration-form fieldset:nth-child(2)').fadeIn('slow');
+                $("#youtube_video")[0].src += "?autoplay=1";
+                //ev.preventDefault();
+
+            });
+
         });
         Instascan.Camera.getCameras().then(function (cameras) {
             if (cameras.length > 0) {
@@ -105,12 +114,37 @@ jQuery(document).ready(function() {
 
 	}
 
-	function parse_qr_code(content){
-
-        qr_string = content.split("&");
-
-        return {'email':'abc@gmail.com'}
+	function parse_qr_code(qr_string){
+        qr_string = qr_string.split("&");
+        username = qr_string[0].split("=")[1];
+        password = qr_string[1].split("=")[1];
+        return {'username':username,'password':password,'action':'login'}
 	}
+
+    //function to login
+    function login(qr_json){
+
+        $.ajax({
+            type: "POST",
+            url: "/qr/php/main.php",
+            dataType: 'json',
+            async: false,
+            data: qr_json,
+            success: function (response){
+                if(!response['success']){
+                    $('.qr_error').text("");
+                    //window.location.href = "/qr/dashboard.php";
+                }
+                else{
+                    $('.qr_error').text("Invalid QR");
+                }
+            },
+            error: function (e){
+                console.log("Error ",e);
+                $('.qr_error').text("Invalid QR");
+            }
+        });
+    }
     
     
 });

@@ -53,6 +53,11 @@ jQuery(document).ready(function() {
 
             $('#btn_start').css('display','');
         }
+        else if(button_id == "btn_continue"){
+            parent_fieldset.fadeOut(400, function() {
+                $(this).next().fadeIn();
+            });
+        }
         else{
             var selected_option = parent_fieldset.find("input[type='radio']:checked").val();
 

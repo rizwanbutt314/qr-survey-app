@@ -1,13 +1,11 @@
 <?php
 
-include 'config.php';
-
 function db_connection(){
-    $connection = mysqli_connect(''.$HOST, ''.$USERNAME, ''.$PASSWORD);
+    $connection = mysqli_connect('localhost', 'root', '');
     if (!$connection){
         die("Database Connection Failed" . mysqli_error($connection));
     }
-    $select_db = mysqli_select_db($connection, ''.$DATABASE);
+    $select_db = mysqli_select_db($connection, 'qrApp');
     if (!$select_db){
         die("Database Selection Failed" . mysqli_error($connection));
     }
